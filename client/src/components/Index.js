@@ -14,11 +14,10 @@ const Index =  ({ context }) => {
     <div className="wrap main--grid">
       {
         courses.map(course =>
-          <a className="course--module course--link" href={`/course/${course.id}`}>
-          <h2 className="course--label">Course</h2>
-          <h3 className="course--title">{course.title}</h3>
-        </a>
-        )
+          <a key={course.id} className="course--module course--link" href={`/course/${course.id}`}>
+            <h2 className="course--label">Course</h2>
+            <h3 className="course--title">{course.title}</h3>
+          </a>)
       }
       <Link className="course--module course--add--module" to={"/course-create"}>
         <span className="course--add--title">

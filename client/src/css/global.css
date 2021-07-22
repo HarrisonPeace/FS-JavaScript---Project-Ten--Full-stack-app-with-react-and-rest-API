@@ -239,3 +239,25 @@ input:focus, button:focus, .button:focus, textarea:focus {
         display: inline-block;
     }
 }
+
+.show-password {
+    fill: #57496e;
+    width: 40px;
+    position: absolute;
+    right: 6px;
+    bottom: 0px;
+    cursor: pointer;
+}
+
+.form-error {
+    margin-bottom: 15px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #57496e;
+}
+
+.error {
+    display: none;
+    color: red;
+    margin-bottom: 17px;
+}

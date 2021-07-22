@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import { 
   CookiesProvider,
-  useCookies
+  useCookies,
 } from 'react-cookie';
 import Data from './Data';
 
 const Context = React.createContext();
 
-
 export const Provider = (props) => {
+
   const data = new Data();
   const [cookies, setCookie, removeCookie] = useCookies(['authenticatedUser']);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+  //const [error, setError] = useState(false);
   const [authenticatedUser, setAuthenticatedUser] = useState(cookies.authenticatedUser || null);
 
   const getCourses = async () => {
@@ -25,20 +25,38 @@ export const Provider = (props) => {
     return course;
   }
 
-  const sign_In = async (username, password) => {
+  const signIn = async (username, password) => {
     const user = await data.getUser(username, password);
     if (user !== null) {
+      let date = new Date();
+      date.setDate(date.getDate() + 1);
       setAuthenticatedUser(user);
       setCookie('authenticatedUser', JSON.stringify(user), {
         path: '/',
-        expires: 1
+        expires: date
       });
     }
     return user;
   }
 
-  const sign_Out = () => {
-    this.setState({ authenticatedUser: null });
+  const signUp = async (firstName, lastName, emailAddress, password) => {
+    const newUser = {firstName, lastName, emailAddress, password}
+    const user = await data.createUser(newUser)
+    if (user !== null) {
+      let date = new Date();
+      date.setDate(date.getDate() + 1);
+      setAuthenticatedUser(`${newUser.firstName} ${newUser.lastName}`);
+      console.log(authenticatedUser)
+      setCookie('authenticatedUser', JSON.stringify(firstName + lastName), {
+        path: '/',
+        expires: date
+      });
+    }
+    return user;
+  }
+
+  const signOut = () => {
+    setAuthenticatedUser(null);
     removeCookie('authenticatedUser')
   }
 
@@ -46,11 +64,11 @@ export const Provider = (props) => {
     <Context.Provider value={{
       authenticatedUser,
       loading,
-      error,
       actions: {
         setLoading,
-        sign_In,
-        sign_Out,
+        signIn,
+        signOut,
+        signUp,
         getCourses,
         getCourse
       }

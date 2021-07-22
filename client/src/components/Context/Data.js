@@ -2,17 +2,18 @@ import config from './config';
 import axios from 'axios';
 
 export default class Data {
-  api(path, method = 'GET', body = null, requiresAuth = false, credentials = null) {
+  api(path, method = 'GET', data = null, requiresAuth = false, credentials = null) {
     const options = {
       url: `${config.apiBaseUrl}${path}`,
       method,
+      data,
       headers: {
         'Content-Type': 'application/json; charset=utf-8', 
       },
     };
-    if (body !== null) {
-      options.body = JSON.stringify(body);
-    }
+    // if (body !== null) {
+    //   options.body = JSON.stringify(body);
+    // }
     // Check if auth is required
     if (requiresAuth) {    
       const encodedCredentials = Buffer.from(`${credentials.username}:${credentials.password}`, 'base64');
@@ -58,5 +59,14 @@ export default class Data {
     else {
       throw new Error();
     }
+  }
+
+  async createUser(newUser) {
+      await this.api(`/users`, 'POST', newUser)
+      .then(response => response)
+      .catch(function (error) {
+        let message = error.response.data.errors;
+        throw new Error(message)
+      });
   }
 }

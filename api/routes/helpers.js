@@ -14,6 +14,7 @@ function asyncHandler(cb){
     } catch (error) {
       if(error.name === "SequelizeValidationError" || error.name === "SequelizeUniqueConstraintError") { // checking sequelize errors
         const errors = error.errors.map(err => err.message);
+        console.log(error)
         res.status(400).json({
           errors
         })

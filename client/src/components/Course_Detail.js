@@ -13,7 +13,6 @@ const CourseDetails = ({ context }) => {
     .then(data => {
       setCourse(data.data.course)
       setLoading(false)
-      console.log(course)
     })
   }, [context, id]);
 

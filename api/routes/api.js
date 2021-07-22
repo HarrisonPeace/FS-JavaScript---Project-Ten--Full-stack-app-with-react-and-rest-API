@@ -22,6 +22,7 @@ router.get('/users', authenticateUser, asyncHandler(async (req, res, next) => {
 
 /* POST add new user */
 router.post('/users', asyncHandler(async (req, res, next) => {
+  console.log(req.body);
   await User.create(req.body);
   res.location('/').status(201).end();
 }));

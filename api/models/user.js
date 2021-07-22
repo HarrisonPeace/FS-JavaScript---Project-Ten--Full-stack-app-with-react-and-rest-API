@@ -24,8 +24,8 @@ module.exports = (sequelize) => {
       },
     },
     emailAddress: {
-      allowNull: false,
       type: DataTypes.STRING,
+      allowNull: false,
       unique: { msg: `'User is already found in the system'` },
       validate: {
         notNull: { msg: 'An email is required' },
@@ -39,25 +39,20 @@ module.exports = (sequelize) => {
       validate: {
         notNull: { msg: 'A password is required' },
         notEmpty: { msg: 'A password is required' },
-        len: {
-          arg: [6, 20],
-          msg: 'Password must be between 6 and 20 characters'
+        checkPasswordLength(value) {
+          if (value.length < 6 || value.length > 20) {
+            throw new Error('Password must be between 6 and 20 characters');
+          }
         },
-        is: {
-          arg: /[A-Z]/,
-          msg: 'Password must contain at least one capital letter'
+        hasSpecialCharacter(value) {
+          if (!/[^\d\w\s]/.test(value)) {
+            throw new Error('Password must contain at least one special character');
+          }
         },
-        is: {
-          arg: /[a-z]/,
-          msg: 'Password must contain at least one lowercase letter'
-        },
-        is: {
-          arg: /[^\d\w\s]/,
-          msg: 'Password must contain at least one special character'
-        },
-        is: {
-          arg: /\d/,
-          msg: 'Password must contain at least one number'
+        hasCapitalLetter(value) {
+          if (!/[A-Z]/.test(value)) {
+            throw new Error('Password must contain at least one capital letter');
+          }
         },
         set(value) {
           this.setDataValue('password', bcrypt.hashSync(value, 10));

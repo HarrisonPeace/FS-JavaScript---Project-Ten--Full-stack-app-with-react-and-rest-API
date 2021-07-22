@@ -2,6 +2,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 
 const Header = ({ context } ) => {
+
   return (
     <>
       <header>
@@ -12,7 +13,7 @@ const Header = ({ context } ) => {
           <nav>
             {context.authenticatedUser ? (
               <ul className="header--signed-in">
-                <li>Welcome, {context.authenticatedUser}!</li>
+                <li>Welcome, {context.authenticatedUser.name}!</li>
                 <li>
                   <NavLink to={`/sign-out`}>{"Sign Out"}</NavLink>
                 </li>
