@@ -261,3 +261,8 @@ input:focus, button:focus, .button:focus, textarea:focus {
     color: red;
     margin-bottom: 17px;
 }
+
+.server-error-message {
+    margin-bottom: 10px;
+    font-size: 18px;
+}

@@ -28,8 +28,6 @@ module.exports = (sequelize) => {
       allowNull: false,
       unique: { msg: `'User is already found in the system'` },
       validate: {
-        notNull: { msg: 'An email is required' },
-        notEmpty: { msg: 'An email is required' },
         isEmail: { msg: 'Please enter a valid email' }
       },
     },
@@ -37,8 +35,6 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        notNull: { msg: 'A password is required' },
-        notEmpty: { msg: 'A password is required' },
         checkPasswordLength(value) {
           if (value.length < 6 || value.length > 20) {
             throw new Error('Password must be between 6 and 20 characters');

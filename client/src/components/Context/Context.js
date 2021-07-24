@@ -12,22 +12,26 @@ export const Provider = (props) => {
   const data = new Data();
   const [cookies, setCookie, removeCookie] = useCookies(['authenticatedUser']);
   const [loading, setLoading] = useState(true);
-  //const [error, setError] = useState(false);
   const [authenticatedUser, setAuthenticatedUser] = useState(cookies.authenticatedUser || null);
 
   const getCourses = async () => {
-    const courses = await data.getCourses();
+    const courses = await data.getCourses()
+    .catch(errorHandler);
     return courses;
   }
 
   const getCourse = async (id) => {
-    const course = await data.getCourse(id);
+    const course = await data.getCourse(id)
+    .catch(errorHandler)
     return course;
   }
 
   const signIn = async (username, password) => {
-    const user = await data.getUser(username, password);
+    const user = await data.getUser(username, password)
+    .catch(errorHandler);
     if (user !== null) {
+      console.log(user)
+      user.password = password;
       let date = new Date();
       date.setDate(date.getDate() + 1);
       setAuthenticatedUser(user);
@@ -42,12 +46,12 @@ export const Provider = (props) => {
   const signUp = async (firstName, lastName, emailAddress, password) => {
     const newUser = {firstName, lastName, emailAddress, password}
     const user = await data.createUser(newUser)
+    .catch(errorHandler);
     if (user !== null) {
       let date = new Date();
       date.setDate(date.getDate() + 1);
-      setAuthenticatedUser(`${newUser.firstName} ${newUser.lastName}`);
-      console.log(authenticatedUser)
-      setCookie('authenticatedUser', JSON.stringify(firstName + lastName), {
+      setAuthenticatedUser(newUser);
+      setCookie('authenticatedUser', newUser, {
         path: '/',
         expires: date
       });
@@ -58,6 +62,20 @@ export const Provider = (props) => {
   const signOut = () => {
     setAuthenticatedUser(null);
     removeCookie('authenticatedUser')
+  }
+
+  /* Handler function to catch async and sequelize errors */
+  function errorHandler (error) {
+    let message = error.response.data.error;
+    if (typeof message !== 'string') {
+      let formattedMessage = message.map(message => {
+      if(message) return `<p class="server-error-message">${message}</p>`
+      else return null
+    }).join(' ')
+    throw new Error(formattedMessage)
+    } else {
+      throw new Error(message)
+    }
   }
 
   return (

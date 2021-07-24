@@ -11,62 +11,35 @@ export default class Data {
         'Content-Type': 'application/json; charset=utf-8', 
       },
     };
-    // if (body !== null) {
-    //   options.body = JSON.stringify(body);
-    // }
     // Check if auth is required
-    if (requiresAuth) {    
-      const encodedCredentials = Buffer.from(`${credentials.username}:${credentials.password}`, 'base64');
-      options.headers['Authorization'] = `Basic ${encodedCredentials}`;
+    if (requiresAuth) {
+      options.auth = {}
+      options.auth.username = credentials.username;
+      options.auth.password = credentials.password;    
     }
     return axios(options);
   }
-
+  
   async getCourses() {
-    const response = await this.api(`/courses`);
-    if (response.status === 200) {
-      return response;
-    }
-    else if (response.status === 401) {
-      return null;
-    }
-    else {
-      throw new Error();
-    }
+    const courses = await this.api(`/courses`)
+    return courses
   }
 
   async getCourse(id) {
-    const response = await this.api(`/courses/${id}`);
-    if (response.status === 200) {
-      return response;
-    }
-    else if (response.status === 401) {
-      return null;
-    }
-    else {
-      throw new Error();
-    }
+    const course = await this.api(`/courses/${id}`)
+    return course
   }
 
   async getUser(username, password) {
-    const response = await this.api(`/courses`, 'GET', null, true, { username, password });
-    if (response.status === 200) {
-      return data => data;
-    }
-    else if (response.status === 401) {
-      return null;
-    }
-    else {
-      throw new Error();
-    }
+    const user = await this.api(`/users`, 'GET', null, true, { username, password })
+    return user
   }
 
   async createUser(newUser) {
-      await this.api(`/users`, 'POST', newUser)
-      .then(response => response)
-      .catch(function (error) {
-        let message = error.response.data.errors;
-        throw new Error(message)
-      });
+    const user = await this.api(`/users`, 'POST', newUser)
+    return user;
   }
 }
+
+
+

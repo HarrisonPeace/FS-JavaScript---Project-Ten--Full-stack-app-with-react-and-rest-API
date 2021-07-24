@@ -10,6 +10,7 @@ import {
 import withContext from './components/Context/Context';
 import Header from './components/Header'
 import Layout from "./components/Layout";
+import Error from './components/Error'
 import Index from './components/Index'
 import Sign_In from './components/Sign_In'
 import Sign_Up from './components/Sign_Up'
@@ -34,9 +35,8 @@ function App() {
         <HeaderWithContext/>
         <Layout>
           <Switch>
-            <Route exact path="/"> 
-              <Redirect to="/courses" />
-            </Route>
+            <Route exact path="/"><Redirect to="/courses" /></Route>
+            <Route path="/error" component={ Error }></Route>
             <Route path="/courses" component={ IndexWithContext }></Route>
             <Route path="/sign-in" component={ SignInWithContext }></Route>
             <Route path="/sign-up" component={ SignUpWithContext }></Route>

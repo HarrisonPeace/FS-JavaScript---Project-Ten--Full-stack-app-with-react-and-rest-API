@@ -13,7 +13,7 @@ const Header = ({ context } ) => {
           <nav>
             {context.authenticatedUser ? (
               <ul className="header--signed-in">
-                <li>Welcome, {context.authenticatedUser.name}!</li>
+                <li>Welcome, {context.authenticatedUser.firstName} {context.authenticatedUser.lastName}!</li>
                 <li>
                   <NavLink to={`/sign-out`}>{"Sign Out"}</NavLink>
                 </li>
