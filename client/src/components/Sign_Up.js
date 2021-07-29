@@ -4,7 +4,6 @@ import { Link, useHistory } from "react-router-dom";
 const SignUp = ({ context }) => {
 
   let history = useHistory();
-
   let firstNameHint = useRef(null);
   let lastNameHint = useRef(null);
   let emailHint = useRef(null);
@@ -12,6 +11,12 @@ const SignUp = ({ context }) => {
   let passwordInput = useRef(null);
   let confirmPasswordInput = useRef(null);
   let serverError = useRef(null);
+
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [emailAddress, setEmailAddress] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const isValidEmail = () => {
     if (/^[^@]+@([a-z]|\d|-)+.com$/.test(emailAddress)) { //test for usual email format
@@ -42,23 +47,18 @@ const SignUp = ({ context }) => {
 
   const isValidPassword = () => {
     let errors = "";
-
     if(password.length < 6 || password.length > 20) {
       errors += '<p class="form-error">*Password must be between 6 and 20 characters</p>'
     }
-
     if(!/[A-Z]/.test(password)) {
       errors += '<p class="form-error">*Password must contain at least one capital letter</p>'
     }
-
     if(!/[^\d\w\s]/.test(password)) {
       errors += '<p class="form-error">*Password must contain at least one special character</p>'
     }
-
     if(password !== confirmPassword) {
       errors += `<p class="form-error">*Passwords don't match</p>`
     }
-
     if(errors) {
       passwordHints.current.innerHTML = errors;
       return false;
@@ -94,17 +94,15 @@ const SignUp = ({ context }) => {
       context.actions.signUp(firstName, lastName, emailAddress, password)
       .then(user => {history.push('/courses')})
       .catch(error => {
-        serverError.current.innerHTML = `Error: ${error.message}`
-        serverError.current.style.display = "inline-block"
+        if(error.message === "Cannot read property 'data' of undefined") {
+          history.push('/error')
+        } else {
+          serverError.current.innerHTML = `Error: ${error.message}`
+          serverError.current.style.display = "inline-block"
+        }
       })
     }
   };
-
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [emailAddress, setEmailAddress] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
 
   return (
     <div className="form--centered">

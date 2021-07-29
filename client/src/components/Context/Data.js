@@ -19,6 +19,11 @@ export default class Data {
     }
     return axios(options);
   }
+
+  async checkServer() {
+    const serverStatus = await this.api('/')
+    return serverStatus;
+  }
   
   async getCourses() {
     const courses = await this.api(`/courses`)
@@ -28,6 +33,21 @@ export default class Data {
   async getCourse(id) {
     const course = await this.api(`/courses/${id}`)
     return course
+  }
+
+  async createCourse(newCourse, username, password) {
+    const course = await this.api(`/courses`, 'POST', newCourse, true, { username, password })
+    return course;
+  }
+
+  async updateCourse(id, updatedCourse, username, password) {
+    const course = await this.api(`/courses/${id}`, 'PUT', updatedCourse, true, { username, password })
+    return course;
+  }
+
+  async deleteCourse(id, username, password) {
+    const course = await this.api(`/courses/${id}`, 'DELETE', null, true, { username, password })
+    return course;
   }
 
   async getUser(username, password) {

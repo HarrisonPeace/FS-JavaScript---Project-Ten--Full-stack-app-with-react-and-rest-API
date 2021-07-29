@@ -121,6 +121,7 @@ header nav a:hover {
     padding: 1rem;
     border-radius: .5rem;
     margin-bottom: 2.5rem;
+    width: 100%;
 }
 .validation--errors h3 {
     color: #800;
@@ -265,4 +266,9 @@ input:focus, button:focus, .button:focus, textarea:focus {
 .server-error-message {
     margin-bottom: 10px;
     font-size: 18px;
+}
+
+#courseDescription,
+#materialsNeeded {
+    margin-bottom: 0;
 }

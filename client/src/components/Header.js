@@ -4,7 +4,6 @@ import { NavLink } from "react-router-dom";
 const Header = ({ context } ) => {
 
   return (
-    <>
       <header>
         <div className="wrap header--flex">
           <h1 className="header--logo">
@@ -31,7 +30,6 @@ const Header = ({ context } ) => {
           </nav>
         </div>
       </header>
-    </>
   );
 };
 

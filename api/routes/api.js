@@ -8,7 +8,7 @@ const Course = require('../models').Course;
 /* GET show API instructions. */
 router.get('/', function(req, res, next) {
   res.json({ 
-    welcome: "You have made it to the REST API project!",
+    status: "Server connected and working",
   })
 });
 
@@ -56,6 +56,7 @@ router.get('/courses/:id', asyncHandler(async (req, res, next) => {
 
 /* POST create a new course */
 router.post('/courses', authenticateUser, asyncHandler(async (req, res, next) => {
+  console.log(req.body)
   let course = await Course.create(req.body);
   res.location(`/api/courses/${course.dataValues.id}`).status(201).end();
 }));

@@ -25,9 +25,6 @@ function asyncHandler(cb){
 /* Handler function to authenticate user */
 async function authenticateUser(req, res, next) {
   const credentials = auth(req);
-  console.log(credentials)
-  console.log(req.buffer)
-  console.log(req._headers)
   let message = null;
   if (credentials) {
     const user = await User.findOne({ where: {emailAddress: credentials.name} });
