@@ -12,7 +12,7 @@ const Error = ({ context, error }) => {
   }, [context]);
 
   return (
-    <div className="not-found">
+    <div className="wrap">
       {
         error ?
         <>

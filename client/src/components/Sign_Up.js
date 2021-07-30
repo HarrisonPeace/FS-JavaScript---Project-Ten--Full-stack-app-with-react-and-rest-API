@@ -1,6 +1,10 @@
 import React, { useState, useRef } from "react";
 import { Link, useHistory } from "react-router-dom";
 
+import Loading from './Loading'
+import ErrorInline from './Error/Error_Inline';
+import { errorHandler } from './Error/error_Handler';
+
 const SignUp = ({ context }) => {
 
   let history = useHistory();
@@ -10,13 +14,14 @@ const SignUp = ({ context }) => {
   let passwordHints = useRef(null);
   let passwordInput = useRef(null);
   let confirmPasswordInput = useRef(null);
-  let serverError = useRef(null);
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState({title: 'Error', message:[]});
+  const [loading, setLoading] = useState(false);
 
   const isValidEmail = () => {
     if (/^[^@]+@([a-z]|\d|-)+.com$/.test(emailAddress)) { //test for usual email format
@@ -91,23 +96,24 @@ const SignUp = ({ context }) => {
     let vEmail = isValidEmail(); //confirm email has been validated 
     let vPassword = isValidPassword();
     if (vFirstName && vLastName && vEmail && vPassword) { //check if error with any component
+      setLoading(true)
       context.actions.signUp(firstName, lastName, emailAddress, password)
       .then(user => {history.push('/courses')})
       .catch(error => {
-        if(error.message === "Cannot read property 'data' of undefined") {
-          history.push('/error')
-        } else {
-          serverError.current.innerHTML = `Error: ${error.message}`
-          serverError.current.style.display = "inline-block"
-        }
+        setLoading(false)
+        const ServerErrors = errorHandler(error)
+        setError(ServerErrors)
       })
     }
   };
 
   return (
+    <>
+    {
+      loading ? <Loading/> : null
+    }
     <div className="form--centered">
       <h2>Sign Up</h2>
-      <h3 className="error" ref={serverError}>*An error occurred with the server, please review all form fields and try again.*</h3>
       <form onSubmit={handleSubmit}>
         <label >First Name <span ref={firstNameHint} style={{ display: "none" }} className="form-error">*cannot be blank</span>
           <input 
@@ -170,13 +176,17 @@ const SignUp = ({ context }) => {
           </svg>
         </label>
         <div ref={passwordHints}></div>
-        <button className="button" type="submit">Sign Up</button>
-        <button className="button button-secondary" onClick={() => history.push('/')}>Cancel</button>
+        <div className="button-container">
+          <button className="button" type="submit">Sign Up</button>
+          <button className="button button-secondary" onClick={() => history.push('/')}>Cancel</button>
+        </div>
       </form>
-      <p>
+      <p style={{ textAlign: 'center', marginBottom: 0}}>
         <Link to={`/sign-in`}>Already have a user account? <strong>Sign In Here!</strong></Link>
       </p>
     </div>
+    { error.message.length === 0 ? null : <ErrorInline error={error}/> }
+    </>
   );
 };
 

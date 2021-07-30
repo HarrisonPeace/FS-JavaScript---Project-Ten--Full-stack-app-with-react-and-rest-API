@@ -6,23 +6,20 @@
       switch (error.response.status) {
         case 400: //bad request (invalid syntax)
           let message = error.response.data.error;
-          let formattedMessage = message.map(message => {
-            if(message) return message
-            else return null
-          }).join(' ')
-          return (formattedMessage) 
+
+          return {title: 'Error', message}
         case 401:
-          break; //bad credentials
+          return {title: 'Incorrect details', message:['Please try again']}
         case 404:
-          return
-        case 403:
-          break; //no permission
+          return {title: 'Not Found', message:[`Sorry! We couldn't find what you're looking for.`]}
+        case 403: //no permission
+          return {title: 'No Permission', message:[`Sorry you don't have permission to take that action`]}
         case 500:
           break; //internal server error
         default:
-          return 'Sorry! An unexpected error just occurred, please try again.'
+          return {title: 'Unexpected Error', message:['An unexpected error just occurred, please try again.']}
       }
     } else {
-      return 'Sorry! An unexpected error just occurred, please try again.'
+      return {title: 'Unexpected Error', message:['An unexpected error just occurred, please try again.']}
     }
   }

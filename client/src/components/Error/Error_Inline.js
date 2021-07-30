@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 
 import withContext from '../Context/Context';
+import NotFound from './Not_Found'
 
-const ErrorInline = ({ context, errors }) => {
-  console.log(errors)
+const ErrorInline = ({ context, error }) => {
 
-  let isUnexpectedError = errors.includes('Sorry! An unexpected error just occurred, please try again.')
+  let isUnexpectedError = error.title.includes('Unexpected Error')
 
   const [status, setStatus] = useState(null);
 
@@ -13,29 +13,30 @@ const ErrorInline = ({ context, errors }) => {
       if (isUnexpectedError) {
         context.actions.checkServer()
         .then(status => setStatus(status.data.status))
-        .catch(error => setStatus('Server Unresponsive'))
+        .catch(() => setStatus('Server Unresponsive'))
       }
     }, [context, isUnexpectedError]);
 
-
+  if(error.title === 'Not Found') {
+    return <NotFound />
+  }
   return (
-    <div className="validation--errors">
-    <h3>Error:</h3>
+    <div className="validation--errors form--centered">
+      <h3>{error.title}</h3>
       <ul>
-        { 
-          errors.map((error, index) => <li key={`err${index}`}>{error}</li>)
+        { error.message.length === 1 ?
+          <li style={{ listStyleType: 'none', marginLeft: '-18px'}}>{error.message}</li>
+          :
+          error.message.map((errorM, index) => <li key={`err${index}`}>{errorM}</li>)
         }
         { isUnexpectedError ?
-          <>
-            <li>Current Server Status:</li>
-            <ul style={{ listStyleType: 'none', marginLeft: '0'}}>
+            <li style={{ listStyleType: 'none', marginLeft: '-18px'}}>{'Current Server Status: '}                
               { status ?
-                  <li><strong>{status}</strong></li>
-                :
-                  <li><strong>Please wait while we check the connection</strong></li>
+                     <strong>{status}</strong>
+                  :
+                     <strong>Please wait while we check the connection</strong>
               }
-            </ul>
-          </>
+            </li>
         : 
           null
         }

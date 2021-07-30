@@ -1,29 +1,33 @@
 import React, { useState, useRef } from "react";
 import { Link, useHistory, useLocation } from "react-router-dom";
 
+import Loading from './Loading'
+import ErrorInline from './Error/Error_Inline';
+import { errorHandler } from './Error/error_Handler';
+
 const SignIn = ({ context }) => {
 
-  let accessError = useRef(null);
   let history = useHistory();
   let location = useLocation();
   let passwordInput = useRef(null);
   let { from } = location.state || { from: { pathname: "/courses" } };
+  const [error, setError] = useState({title: 'Error', message:[]});
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault(); // prevent form submitting if there is an error
+    setLoading(true)
       context.actions.signIn(emailAddress, password)
-      .then(user => { history.replace(from); })
-      .catch(error => {
-        if(error.message === 'Access Denied') {
-          accessError.current.style.display = "inline-block"
-        } else {
-          history.push('/error')
-        }
-    })
+        .then(() => history.replace(from))
+        .catch(error => {
+          setLoading(false)
+          const ServerErrors = errorHandler(error)
+          setError(ServerErrors)
+        })
   }
-
+  
   const showPassword = () => {
     if(passwordInput.current.type === "password") {
       passwordInput.current.type = "text";
@@ -32,13 +36,13 @@ const SignIn = ({ context }) => {
     }
   }
 
-  return (
+    return (
+    <>
+    {
+      loading ? <Loading/> : null
+    }
     <div className="form--centered">
       <h2>Log In</h2>
-      <div className="validation--errors" ref={accessError} style={{ display: 'none'}}>
-        <h3>Access Denied</h3>
-          <p style={{ marginBottom: '0' }}>Wrong email address and/or password</p>
-      </div>
       <form onSubmit={handleSubmit}>
         <label>Email Address
           <input
@@ -63,13 +67,17 @@ const SignIn = ({ context }) => {
             <path d="m256,183.5c-40,0-72.5,32.5-72.5,72.5s32.5,72.5 72.5,72.5c40,0 72.5-32.5 72.5-72.5s-32.5-72.5-72.5-72.5zm0,164c-50.5,0-91.5-41.1-91.5-91.5 0-50.5 41.1-91.5 91.5-91.5s91.5,41.1 91.5,91.5c0,50.5-41,91.5-91.5,91.5z"/>
           </svg>
         </label>
-        <button className="button" type="submit">Sign In</button>
-        <button className="button button-secondary" onClick={() => history.push('/')}>Cancel</button>
+        <div className="button-container">
+          <button className="button" type="submit">Sign In</button>
+          <button className="button button-secondary" onClick={() => history.push('/')}>Cancel</button>
+        </div>
       </form>
-      <p>
+      <p style={{ textAlign: 'center', marginBottom: 0}}>
         <Link to={`/sign-up`}>Don't have a user account? <strong>Sign Up Here!</strong></Link>
       </p>
     </div>
+    { error.message.length === 0 ? null : <ErrorInline error={error}/> }
+    </>
   );
 };
 

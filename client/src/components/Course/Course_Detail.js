@@ -1,10 +1,8 @@
 import React from "react";
 
 const CourseDetails = ({ course }) => {
-  if (course.length === 0) throw Error('Course Not Found');
   return (
         <div className="wrap">
-          <h2>Course Detail</h2>
           <form>
             <div className="main--flex">
               <div>

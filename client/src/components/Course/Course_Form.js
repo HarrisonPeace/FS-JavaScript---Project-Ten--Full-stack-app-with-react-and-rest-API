@@ -1,19 +1,26 @@
 import React, { useState } from "react";
 import { useHistory } from 'react-router-dom';
 
-import Error from '../Error/Error_Inline';
-
-import { errorHandler } from '../Error/error_handler';
+import ErrorInline from '../Error/Error_Inline';
+import { errorHandler } from '../Error/error_Handler';
+import Forbidden from '../Error/Forbidden'
+import Loading from '../Loading'
 
 const CourseForm = ({ context, course, isCreate }) => {
 
   let history = useHistory();
 
-  const [errors, setErrors] = useState([]);
+  const [error, setError] = useState({title: 'Validation Error', message:[]});
   const [title, setTitle] = useState(course.title || "");
   const [description, setDescription] = useState(course.description || "");
   const [estimatedTime, setEstimatedTime] = useState(course.estimatedTime || "");
   const [materialsNeeded, setMaterialsNeeded] = useState(course.materialsNeeded || "");
+  const [loading, setLoading] = useState(false);
+
+  let authUserId = context.authenticatedUser ?  context.authenticatedUser.id : -1;
+  if(!isCreate && course.User.id !== authUserId) {
+    return <Forbidden />
+  }
 
   const ValidateForm = () => {
     let currentErrors = []
@@ -27,10 +34,10 @@ const CourseForm = ({ context, course, isCreate }) => {
     }
 
     if (currentErrors.length === 0) {
-      setErrors([])
+      setError({title: 'Validation Error', message:[]})
       return true
     } else {
-      setErrors(currentErrors)
+      setError({title: 'Validation Error', message: currentErrors})
       return false
     }
   }
@@ -47,19 +54,24 @@ const CourseForm = ({ context, course, isCreate }) => {
     e.preventDefault(); // prevent form submitting if there is an error
     let formValidated = ValidateForm();
     if (formValidated) { //check if error with any component
+      setLoading(true)
       APICall()
       .then(user => {history.push('/courses')})
       .catch(error => {
+        setLoading(false)
         const ServerErrors = errorHandler(error)
-        setErrors([ServerErrors])
+        setError(ServerErrors)
       })
     }
   };
 
   return (
+    <>
+    {
+      loading ? <Loading/> : null
+    }
     <div className="wrap">
       <h2>{isCreate ? 'Create Course' : 'Update Course'}</h2>
-      { errors.length === 0 ? null : <Error errors={errors}/> }
       <p>{`By ${context.authenticatedUser.firstName} ${context.authenticatedUser.lastName}`}</p>
       <form onSubmit={handleSubmit}>
         <div className="main--flex">
@@ -103,10 +115,14 @@ const CourseForm = ({ context, course, isCreate }) => {
             </label>
           </div>
         </div>
-        <button className="button" type="submit">{isCreate ? 'Create Course' : 'Update Course'}</button>
-        <button className="button button-secondary" onClick={() => history.push(isCreate ? '/' : `/course/${course.id}`)}>Cancel</button>
+        <p class="update-container">
+          <button className="button" type="submit">{isCreate ? 'Create Course' : 'Update Course'}</button>
+          <button className="button button-secondary" onClick={() => history.push(isCreate ? '/' : `/course/${course.id}`)}>Cancel</button>
+        </p>
       </form>
     </div>
+    { error.message.length === 0 ? null : <ErrorInline error={error}/> }
+    </>
   );
 };
 

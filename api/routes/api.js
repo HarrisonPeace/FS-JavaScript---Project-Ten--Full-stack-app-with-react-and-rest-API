@@ -22,7 +22,6 @@ router.get('/users', authenticateUser, asyncHandler(async (req, res, next) => {
 
 /* POST add new user */
 router.post('/users', asyncHandler(async (req, res, next) => {
-  console.log(req.body);
   await User.create(req.body);
   res.location('/').status(201).end();
 }));
@@ -56,7 +55,6 @@ router.get('/courses/:id', asyncHandler(async (req, res, next) => {
 
 /* POST create a new course */
 router.post('/courses', authenticateUser, asyncHandler(async (req, res, next) => {
-  console.log(req.body)
   let course = await Course.create(req.body);
   res.location(`/api/courses/${course.dataValues.id}`).status(201).end();
 }));

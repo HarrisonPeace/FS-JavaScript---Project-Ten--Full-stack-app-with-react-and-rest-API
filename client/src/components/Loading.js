@@ -1,9 +1,10 @@
 import React from "react";
+import loadingIcon from "../loading-icon.gif"
 
 const Loading = () => {
   return (
-    <div className="not-found">
-      <h2>Loading</h2>
+    <div className="loading-container">
+      <img className="loading" src={loadingIcon} alt="Loading Icon"/>
     </div>
   );
 };

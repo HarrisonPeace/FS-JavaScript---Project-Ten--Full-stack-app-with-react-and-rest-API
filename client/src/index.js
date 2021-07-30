@@ -9,13 +9,11 @@ import App from './App';
 import { Provider } from './components/Context/Context';
 
 import reportWebVitals from './reportWebVitals';
-import withContext from './components/Context/Context';
-const AppWithContext = withContext(App);
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider>
-      <AppWithContext />
+      <App />
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')

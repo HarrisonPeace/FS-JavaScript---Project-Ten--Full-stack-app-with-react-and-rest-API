@@ -1,5 +1,11 @@
 import React, { Component } from 'react';
 
+// Component Imports
+import Error from './Error'
+import withContext from '../Context/Context';
+
+const ErrorWithContext = withContext(Error);
+
 class ErrorBoundary extends Component {
   constructor(props) {
     super(props);
@@ -18,8 +24,7 @@ class ErrorBoundary extends Component {
 
   render() {
     if (this.state.hasError) {
-      // You can render any custom fallback UI
-      return <h1>Something went wrong.</h1>;
+      return <ErrorWithContext />
     }
 
     return this.props.children; 
