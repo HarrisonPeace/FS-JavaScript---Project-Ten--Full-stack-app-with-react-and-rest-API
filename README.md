@@ -24,18 +24,27 @@ The app mimics an online database of courses and users.
 The rest API provides the database containing information about users and courses. Users can be created and then authenticated and courses can be retrieved, created, updated and deleted.
 
 -bcrypt is used to hash passwords
+
 -Basic authentication is used
+
 -Sequelize models are used to validate submitted information
+
 -Course create, update and delete as well us GET user are all protected routes requiring authentication
+
 -CORS has been enabled
 
 The React front end provides a user interface to allow easy communication with the api and database
 
 -Error handling has been created to provide users with clear indications as to what has gone wrong (inc NotFound, Forbidden and Error components)
+
 -Most Error handling does not redirect the user so that they maintain there current URL- this has been done for UX so that they can see what it is they searched for
+
 -Form validation has been created for Sign Up, Create Course and Update Course pages
+
 -A show password icon has been created for users to easily show or hide there passwords
+
 -React Context has been used for all api call functions as well as keeping the state of the authenticated user
+
 -Course data is kept lower down in either the Course or Courses component as the data is independent and not used elsewhere
 
 ## Installation
