@@ -1,9 +1,14 @@
+/**
+ * Error Boundary to catch react component mounting and other react errors
+ */
+
 import React, { Component } from 'react';
 
 // Component Imports
-import Error from './Error'
+import Error from './Error_Unhandled'
 import withContext from '../Context/Context';
 
+// Add context to Error page
 const ErrorWithContext = withContext(Error);
 
 class ErrorBoundary extends Component {
@@ -17,14 +22,9 @@ class ErrorBoundary extends Component {
     return { hasError: true };
   }
 
-  componentDidCatch(error, errorInfo) {
-    // You can also log the error to an error reporting service
-    console.log(error, errorInfo);
-  }
-
   render() {
     if (this.state.hasError) {
-      return <ErrorWithContext />
+      return <ErrorWithContext /> //if error show Error page
     }
 
     return this.props.children; 

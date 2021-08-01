@@ -1,62 +1,80 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import {
-  Route,
-  Switch,
-  useRouteMatch,
-} from 'react-router-dom';
+import { Route, Switch, useRouteMatch } from "react-router-dom";
 
-import Loading from '../Loading'
-import CourseActionsBar from './Course_ActionsBar'
-import CourseDetail from './Course_Detail'
-import CourseUpdate from './Course_Update'
-import CourseDelete from './Course_Delete'
-import withContext from '../Context/Context';
-import NotFound from '../Error/Not_Found';
-import Error from '../Error/Error_Inline';
-import { errorHandler } from '../Error/error_Handler';
+// Component Imports
+import Loading from "../Loading";
+import CourseActionsBar from "./Course_ActionsBar";
+import CourseDetail from "./Course_Detail";
+import CourseUpdate from "./Course_Update";
+import CourseDelete from "./Course_Delete";
+import withContext from "../Context/Context";
+import NotFound from "../Error/Not_Found";
+import PrivateRoute from "../../PrivateRoute";
+import Error from "../Error/Error_Inline";
+import { errorHandler } from "../Error/error_handler";
 
+// Add context to delete page
 const CourseDeleteWithContext = withContext(CourseDelete);
 
-const CourseDetails = ({ context, isCreate }) => {
+const CourseDetails = ({ context }) => {
+  //get authenticated user id or set to -1 {no user authenticated}
+  let authUserId = context.authenticatedUser
+    ? context.authenticatedUser.id
+    : -1;
 
-  let authUserId = context.authenticatedUser ?  context.authenticatedUser.id : -1;
-
+  //get current url to use in router
   let { path } = useRouteMatch();
+
+  //get course id from url
   const { id } = useParams();
+
+  // Create state
   const [course, setCourse] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState({title: 'Error', message:[]});
+  const [loading, setLoading] = useState(true); //show loading screen until api responds
+  const [error, setError] = useState({ title: "Error", message: [] }); //set errors to none
 
-    useEffect(() => {
-      context.actions.getCourse(id)
-      .then(response => {
-        setCourse(response.data.course)
+  useEffect(() => {
+    context.actions
+      .getCourse(id) //on mount search for course
+      .then((response) => {
+        //if found show details
+        setCourse(response.data.course);
       })
-      .catch(error => {
-        const ServerErrors = errorHandler(error)
-        setError(ServerErrors)
+      .catch((error) => {
+        //else show error screen
+        const ServerErrors = errorHandler(error);
+        setError(ServerErrors);
       })
-      .finally(response => setLoading(false));
-    }, [context, id]);
+      .finally((response) => setLoading(false)); //finally remove loading screen
+  }, [context, id]);
 
-    if (loading) {
-      return (<Loading />)
-    } else if (error.message.length > 0) {
-      return (<Error error={error}/>) 
-    } else {
-      return (
-        <>
-          <CourseActionsBar courseId={id} courseUserId={course.User.id} authUserId={authUserId}/>
-          <Switch>
-            <Route exact path={path}><CourseDetail course={course}/></Route>
-            <Route path={`${path}/update`}><CourseUpdate course={course} /></Route>
-            <Route path={`${path}/delete`}><CourseDeleteWithContext course={course} /></Route>
-            <Route component={ NotFound }/>
-          </Switch>
+  if (loading) {
+    return <Loading />; //if loading show loading component
+  } else if (error.message.length > 0) {
+    return <Error error={error} />; //if errors show errors component
+  } else {
+    return (
+      <>
+        <CourseActionsBar
+          courseId={id}
+          courseUserId={course.User.id}
+          authUserId={authUserId}
+        />
+        <Switch> {/* pass course data into all course related routes */}
+
+          <Route exact path={path}> <CourseDetail course={course} /> </Route>
+
+          <PrivateRoute path={`${path}/update`}> <CourseUpdate course={course} /> </PrivateRoute>
+
+          <PrivateRoute path={`${path}/delete`}> <CourseDeleteWithContext course={course} /> </PrivateRoute>
+
+          <Route component={NotFound} />
+
+        </Switch>
       </>
-      );
-    }
+    );
+  }
 };
 
 export default CourseDetails;

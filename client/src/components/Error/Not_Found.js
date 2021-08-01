@@ -6,9 +6,7 @@ const NotFound = () => {
     <div className="wrap">
       <h2>Page Not Found</h2>
       <p>Sorry! We couldn't find the page you're looking for.</p>
-      <p>
-        <Link to={`/`}>Return Home</Link>
-      </p>
+      <Link className="button button-secondary" to='/courses'>Return Home</Link>
     </div>
   );
 };

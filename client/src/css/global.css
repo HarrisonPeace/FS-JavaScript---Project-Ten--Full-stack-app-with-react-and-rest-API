@@ -251,6 +251,9 @@ input:focus, button:focus, .button:focus, textarea:focus {
     .course--detail--title {
         margin: 1.5rem 0 .5rem;
     }
+}
+
+@media screen and (min-width: 500px) {
     .button {
         display: inline-block;
     }

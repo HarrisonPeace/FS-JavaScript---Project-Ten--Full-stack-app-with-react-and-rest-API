@@ -6,16 +6,19 @@ const CourseActionsBar = ({ courseId, courseUserId, authUserId }) => {
     <>
       <div className="actions--bar">
         <div className="wrap">
-          <Link className="button button-secondary" to={`/courses`}>Return to List</Link>
-          {
-            courseUserId === authUserId ?
+          <Link className="button button-secondary" to={`/courses`}>
+            Return to List
+          </Link>
+          {courseUserId === authUserId ? ( //only show update and delete buttons if authenticated user id matches course owner id
             <>
-              <Link className="button" to={`/course/${courseId}/update`}>Update Course</Link>
-              <Link className="button"  to={`/course/${courseId}/delete`}>Delete Course</Link>
+              <Link className="button" to={`/course/${courseId}/update`}>
+                Update Course
+              </Link>
+              <Link className="button" to={`/course/${courseId}/delete`}>
+                Delete Course
+              </Link>
             </>
-            :
-            null
-          }
+          ) : null}
         </div>
       </div>
     </>

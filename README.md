@@ -1,70 +1,74 @@
-# Getting Started with Create React App
+# Full Stack Web App With React and Sequelize Rest API
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Build status
 
-## Available Scripts
+Completed 01/08/2021
 
-In the project directory, you can run:
+## Language / Framework
 
-### `npm start`
+Node.js
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Express.js
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+SQL/sequelize
 
-### `npm test`
+React.js
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+CSS/HTML
 
-### `npm run build`
+## Features
+A full stack app created with React and a rest api programed using express and node.js
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+The app mimics an online database of courses and users.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+The rest API provides the database containing information about users and courses. Users can be created and then authenticated and courses can be retrieved, created, updated and deleted.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+-bcrypt is used to hash passwords
+-Basic authentication is used
+-Sequelize models are used to validate submitted information
+-Course create, update and delete as well us GET user are all protected routes requiring authentication
+-CORS has been enabled
 
-### `npm run eject`
+The React front end provides a user interface to allow easy communication with the api and database
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+-Error handling has been created to provide users with clear indications as to what has gone wrong (inc NotFound, Forbidden and Error components)
+-Most Error handling does not redirect the user so that they maintain there current URL- this has been done for UX so that they can see what it is they searched for
+-Form validation has been created for Sign Up, Create Course and Update Course pages
+-A show password icon has been created for users to easily show or hide there passwords
+-React Context has been used for all api call functions as well as keeping the state of the authenticated user
+-Course data is kept lower down in either the Course or Courses component as the data is independent and not used elsewhere
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Installation
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Download product files and unzip.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+To get API running: (do all action in "api" folder)
+Run npm install 
+Run npm run seed 
+Run npm start
 
-## Learn More
+To get API running: (do all action in "client" folder)
+Run npm install 
+Run npm start
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+To login and edit current courses use credentials
+username: joe@smith.com
+password: joepassword
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Otherwise create a new user and courses in order to test the app.
 
-### Code Splitting
+View finished project at http://localhost:3000
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Tests and browser compatibility
 
-### Analyzing the Bundle Size
+As of Aug 2021. no console errors or bugs are reported.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Tested and working.
 
-### Making a Progressive Web App
+## Contribute
+Feel free to download and use files / code 
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## Credits
+TreeHouse - provided seed file
 
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Harrison Peace
