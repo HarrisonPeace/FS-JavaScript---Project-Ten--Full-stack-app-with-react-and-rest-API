@@ -3,8 +3,7 @@ import { Link, useHistory } from "react-router-dom";
 
 // Component Imports
 import Loading from "./Loading";
-import ErrorInline from "./Error/Error_Inline";
-import { errorHandler } from "./Error/error_handler";
+import { errorHandler, ErrorInline } from "./Error/Error";
 
 const SignUp = ({ context }) => {
   //Create history reference
@@ -103,7 +102,7 @@ const SignUp = ({ context }) => {
       context.actions
         .signUp(firstName, lastName, emailAddress, password) //await user creation in api
         .then((user) => {
-          history.push("/courses");
+          history.push("/");
         }) //if success return user to courses screen
         .catch((error) => {
           //if error with sign up show error
@@ -123,6 +122,11 @@ const SignUp = ({ context }) => {
       }
       <div className="form--centered">
         <h2>Sign Up</h2>
+        {
+          error.message.length === 0 ? null : (
+            <ErrorInline error={error} />
+          ) /* error container server errors */
+        }
         <form onSubmit={handleSubmit}>
           <label>
             First Name{" "}
@@ -241,11 +245,6 @@ const SignUp = ({ context }) => {
           </Link>
         </p>
       </div>
-      {
-        error.message.length === 0 ? null : (
-          <ErrorInline error={error} />
-        ) /* error container server errors */
-      }
     </>
   );
 };

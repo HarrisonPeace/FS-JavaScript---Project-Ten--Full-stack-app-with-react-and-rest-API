@@ -9,10 +9,8 @@ import CourseDetail from "./Course_Detail";
 import CourseUpdate from "./Course_Update";
 import CourseDelete from "./Course_Delete";
 import withContext from "../Context/Context";
-import NotFound from "../Error/Not_Found";
 import PrivateRoute from "../../PrivateRoute";
-import Error from "../Error/Error_Inline";
-import { errorHandler } from "../Error/error_handler";
+import {errorHandler, ErrorInline , NotFound} from "../Error/Error"
 
 // Add context to delete page
 const CourseDeleteWithContext = withContext(CourseDelete);
@@ -52,7 +50,7 @@ const CourseDetails = ({ context }) => {
   if (loading) {
     return <Loading />; //if loading show loading component
   } else if (error.message.length > 0) {
-    return <Error error={error} />; //if errors show errors component
+    return <ErrorInline error={error} />; //if errors show errors component
   } else {
     return (
       <>

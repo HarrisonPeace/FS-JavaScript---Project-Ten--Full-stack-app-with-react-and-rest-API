@@ -28,7 +28,7 @@ const Error = ({ context }) => {
         </p>
       )}
       <p>
-        <Link className="button button-secondary" to="/courses">
+        <Link className="button button-secondary" to="/">
           Return Home
         </Link>
       </p>

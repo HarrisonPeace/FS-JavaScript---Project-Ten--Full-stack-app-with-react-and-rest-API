@@ -3,8 +3,7 @@ import { Link, useHistory, useLocation } from "react-router-dom";
 
 // Component Imports
 import Loading from "./Loading";
-import ErrorInline from "./Error/Error_Inline";
-import { errorHandler } from "./Error/error_handler";
+import { errorHandler, ErrorInline } from "./Error/Error";
 
 const SignIn = ({ context }) => {
   //Create history and location reference
@@ -12,7 +11,7 @@ const SignIn = ({ context }) => {
   let location = useLocation();
 
   //set url location 'from' either past page or courses
-  const { from } = location.state || { from: { pathname: "/courses" } };
+  const { from } = location.state || { from: { pathname: "/" } };
 
   //set state
   const [error, setError] = useState({ title: "Error", message: [] });
@@ -39,6 +38,10 @@ const SignIn = ({ context }) => {
       {loading ? <Loading /> : null /* loading overlay */}
       <div className="form--centered">
         <h2>Log In</h2>
+        {location.state ? <p>Please login to access this page</p> : null}
+        {error.message.length === 0 ? null : (
+          <ErrorInline error={error} /* Error Container */ />
+        )}
         <form onSubmit={handleSubmit}>
           <label>
             Email Address
@@ -88,9 +91,6 @@ const SignIn = ({ context }) => {
           </Link>
         </p>
       </div>
-      {error.message.length === 0 ? null : (
-        <ErrorInline error={error} /* Error Container */ />
-      )}
     </>
   );
 };

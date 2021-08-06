@@ -3,27 +3,23 @@ import {
   BrowserRouter as Router,
   Route,
   Switch,
-  Redirect,
 } from "react-router-dom";
 
 // Component Imports
 import withContext from "./components/Context/Context";
 import Header from "./components/Header";
-import Error from "./components/Error/Error_Unhandled";
 import Courses from "./components/Courses";
 import Sign_In from "./components/Sign_In";
 import Sign_Up from "./components/Sign_Up";
 import Sign_Out from "./components/Sign_Out";
 import Course_Create from "./components/Course/Course_Create";
 import Course from "./components/Course/Course";
-import NotFound from "./components/Error/Not_Found";
 import PrivateRoute from "./PrivateRoute";
-import ErrorBoundary from "./components/Error/Error_Boundary";
-import Forbidden from "./components/Error/Forbidden";
+import { ErrorBoundary, ErrorUnhandled, NotFound, ForbiddenWithContext } from "./components/Error/Error";
 
 // Add context to components
 const HeaderWithContext = withContext(Header);
-const ErrorWithContext = withContext(Error);
+const ErrorUnhandledWithContext = withContext(ErrorUnhandled);
 const CoursesWithContext = withContext(Courses);
 const SignInWithContext = withContext(Sign_In);
 const SignUpWithContext = withContext(Sign_Up);
@@ -37,12 +33,8 @@ function App() {
       <HeaderWithContext />
       <ErrorBoundary> {/* Catch react errors */}
         <Switch>
-        
-          <Route exact path="/"> <Redirect to="/courses" /> </Route>
 
-          <Route path="/server-status"> <ErrorWithContext error={false} /> </Route>
-
-          <Route path="/courses"> <CoursesWithContext /> </Route>
+          <Route exact path="/"> <CoursesWithContext /> </Route>
 
           <Route path="/sign-in"> <SignInWithContext /> </Route>
 
@@ -54,9 +46,9 @@ function App() {
 
           <Route path="/course/:id"> <CourseWithContext /> </Route>
 
-          <Route path="/error"> <ErrorWithContext error={true} /> </Route>
+          <Route path="/error"> <ErrorUnhandledWithContext /> </Route>
 
-          <Route path="/forbidden"> <Forbidden /> </Route>
+          <Route path="/forbidden"> <ForbiddenWithContext /> </Route>
 
           <Route path="/not-found"> <NotFound /> </Route>
 

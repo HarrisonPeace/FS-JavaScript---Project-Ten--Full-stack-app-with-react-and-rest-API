@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import withContext from "../Context/Context";
-import NotFound from "./Not_Found";
+import NotFound from "./NotFound";
 
 const ErrorInline = ({ context, error }) => {
   //check if server status is in doubt

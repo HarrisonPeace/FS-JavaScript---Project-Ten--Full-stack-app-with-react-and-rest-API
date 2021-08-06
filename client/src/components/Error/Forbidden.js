@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 
-const Forbidden = () => {
+const Forbidden = ({ context }) => {
   //Create location reference
   let location = useLocation();
 
@@ -14,19 +14,21 @@ const Forbidden = () => {
         here
       </p>
       <div>
-        <Link
-          className="button"
-          style={{ marginRight: "10px", marginBottom: "10px" }}
-          to={{
-            pathname: "/sign-in",
-            state: {
-              from: location /* record location to send user back to after sign in */,
-            },
-          }}
-        >
-          Sign In
-        </Link>
-        <Link className="button button-secondary" to="/courses">
+      {context.authenticatedUser ? null : (
+          <Link
+            className="button"
+            style={{ marginRight: "10px", marginBottom: "10px" }}
+            to={{
+              pathname: "/signin",
+              state: {
+                from: location /* record location to send user back to after sign in */,
+              },
+            }}
+          >
+            Sign In
+          </Link>
+        )}
+        <Link className="button button-secondary" to="/">
           Return Home
         </Link>
       </div>

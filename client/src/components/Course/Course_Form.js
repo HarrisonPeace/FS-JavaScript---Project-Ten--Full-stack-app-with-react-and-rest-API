@@ -5,9 +5,11 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 
 // Component Imports
-import ErrorInline from "../Error/Error_Inline";
-import { errorHandler } from "../Error/error_handler";
-import Forbidden from "../Error/Forbidden";
+import {
+  errorHandler,
+  ForbiddenWithContext,
+  ErrorInline,
+} from "../Error/Error";
 import Loading from "../Loading";
 
 const CourseForm = ({ context, course, isCreate }) => {
@@ -21,7 +23,7 @@ const CourseForm = ({ context, course, isCreate }) => {
   }); //set errors to none
   const [title, setTitle] = useState(course.title || ""); //set if found or set to an empty string if not found {this prevents errors}
   const [description, setDescription] = useState(course.description || ""); //set if found or set to an empty string if not found {this prevents errors}
-  
+
   const [estimatedTime, setEstimatedTime] = useState(
     course.estimatedTime || ""
   ); //set if found or set to an empty string if not found {this prevents errors}
@@ -40,7 +42,7 @@ const CourseForm = ({ context, course, isCreate }) => {
   //if user is trying to update course and user id does not match the user id of the course owner
   //return forbidden component
   if (!isCreate && course.User.id !== authUserId) {
-    return <Forbidden />;
+    return <ForbiddenWithContext />;
   }
 
   const ValidateForm = () => {
@@ -94,7 +96,7 @@ const CourseForm = ({ context, course, isCreate }) => {
       setLoading(true); //show loading overlay while awaiting api
       APICall()
         .then((user) => {
-          history.push("/courses");
+          history.push("/");
         }) //if success return user to courses screen
         .catch((error) => {
           //else show errors
@@ -110,6 +112,13 @@ const CourseForm = ({ context, course, isCreate }) => {
       {loading ? <Loading /> : null /* show loading overlay */}
       <div className="wrap">
         <h2>{isCreate ? "Create Course" : "Update Course"}</h2>
+        {
+          error.message.length === 0 ? null : (
+            <div style={{ width: "510px" }}>
+              <ErrorInline error={error} />
+            </div>
+          ) /* Error container */
+        }
         <p>{`By ${context.authenticatedUser.firstName} ${context.authenticatedUser.lastName}`}</p>
         <form onSubmit={handleSubmit}>
           <div className="main--flex">
@@ -174,11 +183,6 @@ const CourseForm = ({ context, course, isCreate }) => {
           </p>
         </form>
       </div>
-      {
-        error.message.length === 0 ? null : (
-          <ErrorInline error={error} />
-        ) /* Error container */
-      }
     </>
   );
 };

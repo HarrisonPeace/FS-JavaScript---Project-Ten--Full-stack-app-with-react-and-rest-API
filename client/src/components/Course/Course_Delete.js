@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 
+// Component Imports
 import CourseDetail from "./Course_Detail";
-import ErrorInline from "../Error/Error_Inline";
-import { errorHandler } from "../Error/error_handler";
-import Forbidden from "../Error/Forbidden";
 import Loading from "../Loading";
+import {errorHandler, ForbiddenWithContext, ErrorInline } from "../Error/Error"
 
 const DeleteCourse = ({ course, context }) => {
   //Create history reference
@@ -26,14 +25,14 @@ const DeleteCourse = ({ course, context }) => {
   //if user is trying to delete course and user id does not match the user id of the course owner
   //return forbidden component
   if (course.User.id !== authUserId) {
-    return <Forbidden />;
+    return <ForbiddenWithContext />;
   }
 
   function handleDelete(id) {
     setLoading(true); //show loading overlay while awaiting api
     context.actions
       .deleteCourse(id) //await delete course
-      .then(() => history.push("/courses")) //if success return user to courses page
+      .then(() => history.push("/")) //if success return user to courses page
       .catch((error) => {
         //if error show errors
         setLoading(false); //remove loading overlay

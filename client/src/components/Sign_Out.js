@@ -7,7 +7,7 @@ const SignOut = ({ context }) => {
   const handleSubmit = (e) => {
     e.preventDefault(); // prevent form submitting
     context.actions.signOut(); //Sign user out
-    history.push("/courses"); //redirect to courses screen
+    history.push("/"); //redirect to courses screen
   };
 
   return (
