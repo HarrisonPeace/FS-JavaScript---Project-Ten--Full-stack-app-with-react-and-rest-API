@@ -42,12 +42,12 @@ The app mimics an online database of courses and users.
 
 Download product files and unzip.
 
-### To get API running: (do all action in "api" folder)
+### To get API running: (do all actions in "api" folder)
 - Run npm install 
 - Run npm run seed 
 - Run npm start
 
-### To get API running: (do all action in "client" folder)
+### To get API running: (do all actions in "client" folder)
 - Run npm install 
 - Run npm start
 
